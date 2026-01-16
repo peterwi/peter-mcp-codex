@@ -1,0 +1,1 @@
+{"version":3,"file":"net-health.d.ts","sourceRoot":"","sources":["../../src/tools/net-health.ts"],"names":[],"mappings":"AAAA;;GAEG;AAQH,OAAO,KAAK,EAAE,iBAAiB,EAAE,YAAY,EAAyB,MAAM,mBAAmB,CAAC;AAEhG,UAAU,gBAAgB;IACxB,SAAS,CAAC,EAAE,MAAM,CAAC;IACnB,mBAAmB,CAAC,EAAE,OAAO,CAAC;CAC/B;AAED,wBAAsB,aAAa,CACjC,OAAO,GAAE,gBAAqB,GAC7B,OAAO,CAAC,YAAY,CAAC,iBAAiB,CAAC,CAAC,CAmL1C"}

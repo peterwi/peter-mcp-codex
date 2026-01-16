@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "my-tool"
+version = "0.1.0"
+description = "Sample tool template - copy and customize for your own tools"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [{name = "Your Name"}]
+requires-python = ">=3.10"
+dependencies = [
+    "click>=8.0.0",
+    "mcp>=0.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "pytest-cov>=2.10",
+]
+
+[project.scripts]
+my-tool = "my_tool.cli:main"
+my-tool-mcp-server = "my_tool_mcp.server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["my_tool", "my_tool_mcp"]
+
+[tool.black]
+line-length = 100
+
+[tool.mypy]
+check_untyped_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]

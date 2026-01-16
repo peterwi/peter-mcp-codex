@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<evaluation_pack name="perf-mcp" version="1.0.0">
+  <description>
+    Evaluation scenarios for perf-mcp Linux performance troubleshooting tools.
+    Each scenario tests the agent's ability to use the appropriate tools
+    and interpret results for common performance issues.
+  </description>
+
+  <!-- Scenario 1: Basic System Triage -->
+  <scenario id="1" category="triage" difficulty="basic">
+    <prompt>
+      The web server feels sluggish. Run a quick performance check to identify
+      what resource might be the bottleneck.
+    </prompt>
+    <expected_tools>
+      <tool name="perf_info" required="true"/>
+      <tool name="perf_snapshot" required="true"/>
+      <tool name="perf_use_check" required="true"/>
+    </expected_tools>
+    <success_criteria>
+      <criterion>Agent calls perf_info first to understand system capabilities</criterion>
+      <criterion>Agent calls perf_snapshot to gather baseline metrics</criterion>
+      <criterion>Agent calls perf_use_check to apply USE method analysis</criterion>
+      <criterion>Agent identifies the most likely bottleneck from USE results</criterion>
+    </success_criteria>
+  </scenario>
+
+  <!-- Scenario 2: CPU Profiling -->
+  <scenario id="2" category="cpu" difficulty="intermediate">
+    <prompt>
+      CPU utilization is at 85% on a database server. Profile the CPU
+      for 10 seconds to find what functions are consuming the most cycles.
+    </prompt>
+    <expected_tools>
+      <tool name="perf_cpu_profile" required="true">
+        <parameter name="duration_seconds" value="10"/>
+      </tool>
+    </expected_tools>
+    <success_criteria>
+      <criterion>Agent uses perf_cpu_profile with appropriate duration</criterion>
+      <criterion>Agent interprets the top functions from the profile</criterion>
+      <criterion>Agent distinguishes between user and kernel CPU time</criterion>
+      <criterion>Agent provides actionable recommendations based on hot functions</criterion>
+    </success_criteria>
+  </scenario>
+
+  <!-- Scenario 3: Off-CPU Analysis -->
+  <scenario id="3" category="latency" difficulty="intermediate">
+    <prompt>
+      API response times are 3 seconds but CPU is only at 15%. The application
+      must be waiting on something. Find out what it's blocked on.
+    </prompt>
+    <expected_tools>
+      <tool name="perf_offcpu_profile" required="true"/>
+      <tool name="perf_io_latency" required="false"/>
+    </expected_tools>
+    <success_criteria>
+      <criterion>Agent recognizes low CPU + high latency indicates off-CPU issue</criterion>
+      <criterion>Agent uses perf_offcpu_profile to identify blocking points</criterion>
+      <criterion>Agent identifies the type of wait (I/O, network, locks, sleep)</criterion>
+      <criterion>Agent follows up with appropriate tool based on wait type</criterion>
+    </success_criteria>
+  </scenario>
+
+  <!-- Scenario 4: Memory Pressure -->
+  <scenario id="4" category="memory" difficulty="intermediate">
+    <prompt>
+      A containerized application was OOM-killed. Check memory pressure
+      and container limits to understand why.
+    </prompt>
+    <expected_tools>
+      <tool name="perf_snapshot" required="true">
+        <parameter name="include_psi" value="true"/>
+      </tool>
+      <tool name="perf_cgroup_summary" required="true"/>
+    </expected_tools>
+    <success_criteria>
+      <criterion>Agent checks PSI memory metrics from snapshot</criterion>
+      <criterion>Agent uses perf_cgroup_summary to check container limits</criterion>
+      <criterion>Agent identifies memory.current vs memory.max relationship</criterion>
+      <criterion>Agent notes OOM kill count from cgroup events</criterion>
+      <criterion>Agent recommends appropriate limit adjustments</criterion>
+    </success_criteria>
+  </scenario>
+
+  <!-- Scenario 5: Block I/O Latency -->
+  <scenario id="5" category="io" difficulty="intermediate">
+    <prompt>
+      Database queries are slow. Get a histogram of block I/O latency
+      to understand the storage performance characteristics.
+    </prompt>
+    <expected_tools>
+      <tool name="perf_bio_latency" required="true"/>
+    </expected_tools>
+    <success_criteria>
+      <criterion>Agent uses perf_bio_latency for histogram</criterion>
+      <criterion>Agent interprets percentile values (p50, p95, p99)</criterion>
+      <criterion>Agent identifies tail latency if present</criterion>
+      <criterion>Agent correlates latency with device type expectations</criterion>
+    </success_criteria>
+  </scenario>
+
+  <!-- Scenario 6: Linear Histogram for I/O SLA -->
+  <scenario id="6" category="io" difficulty="advanced">
+    <prompt>
+      We have an SLA that 99% of I/O should complete within 50ms.
+      Get block I/O latency with 10ms buckets so we can verify SLA compliance.
+    </prompt>
+    <expected_tools>
+      <tool name="perf_bio_latency" required="true">
+        <parameter name="histogram_type" value="linear"/>
+        <parameter name="linear_bucket_ms" value="10"/>
+      </tool>
+    </expected_tools>
+    <success_criteria>
+      <criterion>Agent uses linear histogram mode for SLA verification</criterion>
+      <criterion>Agent sets appropriate bucket size (10ms)</criterion>
+      <criterion>Agent calculates percentage within SLA threshold</criterion>
+      <criterion>Agent clearly reports SLA compliance status</criterion>
+    </success_criteria>
+  </scenario>
+
+  <!-- Scenario 7: VFS vs Block I/O (Cache Analysis) -->
+  <scenario id="7" category="io" difficulty="advanced">
+    <prompt>
+      We suspect the page cache isn't working well. Compare VFS operations
+      to actual block I/O to measure cache effectiveness.
+    </prompt>
+    <expected_tools>
+      <tool name="perf_io_layers" required="true"/>
+    </expected_tools>
+    <success_criteria>
+      <criterion>Agent uses perf_io_layers to compare layers</criterion>
+      <criterion>Agent calculates and explains read hit rate</criterion>
+      <criterion>Agent explains write coalescing behavior</criterion>
+      <criterion>Agent identifies if cache is effective or not</criterion>
+      <criterion>Agent provides recommendations if cache hit rate is low</criterion>
+    </success_criteria>
+  </scenario>
+
+  <!-- Scenario 8: File Descriptor Leak -->
+  <scenario id="8" category="resources" difficulty="intermediate">
+    <prompt>
+      Application crashes with "too many open files" after running for hours.
+      Check if there's a file descriptor leak in process 12345.
+    </prompt>
+    <expected_tools>
+      <tool name="perf_fd_trace" required="true">
+        <parameter name="pid" value="12345"/>
+        <parameter name="duration_seconds" value="60"/>
+      </tool>
+    </expected_tools>
+    <success_criteria>
+      <criterion>Agent uses perf_fd_trace with correct PID</criterion>
+      <criterion>Agent monitors FD count over time</criterion>
+      <criterion>Agent calculates FD growth rate</criterion>
+      <criterion>Agent identifies FD types that are growing</criterion>
+      <criterion>Agent estimates time to exhaustion based on growth rate</criterion>
+    </success_criteria>
+  </scenario>
+
+  <!-- Scenario 9: Network Health Check -->
+  <scenario id="9" category="network" difficulty="basic">
+    <prompt>
+      Users report intermittent connection failures. Check network health
+      for any drops, errors, or high retransmit rates.
+    </prompt>
+    <expected_tools>
+      <tool name="perf_net_health" required="true"/>
+    </expected_tools>
+    <success_criteria>
+      <criterion>Agent uses perf_net_health</criterion>
+      <criterion>Agent checks RX/TX drops and errors</criterion>
+      <criterion>Agent evaluates TCP retransmit rate</criterion>
+      <criterion>Agent identifies any network issues found</criterion>
+      <criterion>Agent provides specific tuning recommendations</criterion>
+    </success_criteria>
+  </scenario>
+
+  <!-- Scenario 10: Time-Series Monitoring -->
+  <scenario id="10" category="monitoring" difficulty="intermediate">
+    <prompt>
+      Capture 1 minute of performance data with samples every 10 seconds
+      to see if there's a pattern in CPU or I/O usage.
+    </prompt>
+    <expected_tools>
+      <tool name="perf_snapshot" required="true">
+        <parameter name="interval_sec" value="10"/>
+        <parameter name="count" value="6"/>
+      </tool>
+    </expected_tools>
+    <success_criteria>
+      <criterion>Agent uses interval mode for time-series collection</criterion>
+      <criterion>Agent sets appropriate interval and count</criterion>
+      <criterion>Agent analyzes trends across samples</criterion>
+      <criterion>Agent identifies any spikes or patterns</criterion>
+    </success_criteria>
+  </scenario>
+
+  <!-- Scenario 11: Syscall Hotspot -->
+  <scenario id="11" category="syscalls" difficulty="advanced">
+    <prompt>
+      Application seems to be making excessive syscalls. Profile syscall
+      activity for process 5678 to find the hotspots.
+    </prompt>
+    <expected_tools>
+      <tool name="perf_syscall_count" required="true">
+        <parameter name="pid" value="5678"/>
+        <parameter name="include_latency" value="true"/>
+      </tool>
+    </expected_tools>
+    <success_criteria>
+      <criterion>Agent uses perf_syscall_count with PID filter</criterion>
+      <criterion>Agent includes latency information</criterion>
+      <criterion>Agent identifies top syscalls by count and time</criterion>
+      <criterion>Agent recognizes patterns (e.g., futex = lock contention)</criterion>
+      <criterion>Agent suggests optimizations based on syscall profile</criterion>
+    </success_criteria>
+  </scenario>
+
+  <!-- Scenario 12: DNS Latency Investigation -->
+  <scenario id="12" category="network" difficulty="intermediate">
+    <prompt>
+      Service startup is slow. We suspect DNS resolution delays.
+      Trace DNS lookups to measure their latency.
+    </prompt>
+    <expected_tools>
+      <tool name="perf_dns_latency" required="true"/>
+    </expected_tools>
+    <success_criteria>
+      <criterion>Agent uses perf_dns_latency</criterion>
+      <criterion>Agent identifies slow DNS lookups</criterion>
+      <criterion>Agent notes which hostnames are slow to resolve</criterion>
+      <criterion>Agent recommends DNS caching or configuration changes</criterion>
+    </success_criteria>
+  </scenario>
+
+  <!-- Scenario 13: Process Execution Tracing -->
+  <scenario id="13" category="processes" difficulty="intermediate">
+    <prompt>
+      Something is spawning lots of short-lived processes. Trace process
+      executions for 30 seconds to see what's being run.
+    </prompt>
+    <expected_tools>
+      <tool name="perf_exec_trace" required="true">
+        <parameter name="duration_seconds" value="30"/>
+        <parameter name="include_timestamps" value="true"/>
+      </tool>
+    </expected_tools>
+    <success_criteria>
+      <criterion>Agent uses perf_exec_trace with appropriate duration</criterion>
+      <criterion>Agent captures timestamps for correlation</criterion>
+      <criterion>Agent identifies patterns in process execution</criterion>
+      <criterion>Agent determines the source of process spawning</criterion>
+    </success_criteria>
+  </scenario>
+
+  <!-- Scenario 14: VFS Latency Tracing -->
+  <scenario id="14" category="io" difficulty="advanced">
+    <prompt>
+      Some file operations are taking over 100ms. Find which files
+      have slow operations and which processes are affected.
+    </prompt>
+    <expected_tools>
+      <tool name="perf_vfs_latency" required="true">
+        <parameter name="min_latency_ms" value="100"/>
+      </tool>
+    </expected_tools>
+    <success_criteria>
+      <criterion>Agent uses perf_vfs_latency with appropriate threshold</criterion>
+      <criterion>Agent identifies slow files by name</criterion>
+      <criterion>Agent aggregates by process to find affected applications</criterion>
+      <criterion>Agent distinguishes read vs write latency patterns</criterion>
+    </success_criteria>
+  </scenario>
+
+  <!-- Scenario 15: Container CPU Throttling -->
+  <scenario id="15" category="containers" difficulty="intermediate">
+    <prompt>
+      A containerized service has periodic latency spikes every few seconds.
+      Check if CPU throttling is occurring.
+    </prompt>
+    <expected_tools>
+      <tool name="perf_cgroup_summary" required="true"/>
+    </expected_tools>
+    <success_criteria>
+      <criterion>Agent uses perf_cgroup_summary for container</criterion>
+      <criterion>Agent checks nr_throttled count</criterion>
+      <criterion>Agent calculates throttled time percentage</criterion>
+      <criterion>Agent correlates throttling with latency symptoms</criterion>
+      <criterion>Agent recommends CPU limit adjustments</criterion>
+    </success_criteria>
+  </scenario>
+
+  <!-- Scenario 16: Thread-Level Analysis -->
+  <scenario id="16" category="cpu" difficulty="advanced">
+    <prompt>
+      A multi-threaded application has uneven CPU usage. Analyze per-thread
+      CPU consumption for process 9999.
+    </prompt>
+    <expected_tools>
+      <tool name="perf_thread_profile" required="true">
+        <parameter name="pid" value="9999"/>
+      </tool>
+    </expected_tools>
+    <success_criteria>
+      <criterion>Agent uses perf_thread_profile with correct PID</criterion>
+      <criterion>Agent identifies CPU usage per thread</criterion>
+      <criterion>Agent detects thread imbalance if present</criterion>
+      <criterion>Agent suggests work distribution improvements</criterion>
+    </success_criteria>
+  </scenario>
+
+  <!-- Scenario 17: Capability Fallback -->
+  <scenario id="17" category="capabilities" difficulty="advanced">
+    <prompt>
+      On a system without BCC tools, analyze block I/O latency using
+      available methods.
+    </prompt>
+    <expected_tools>
+      <tool name="perf_info" required="true"/>
+      <tool name="perf_io_latency" required="true">
+        <parameter name="mode" value="snapshot"/>
+      </tool>
+    </expected_tools>
+    <success_criteria>
+      <criterion>Agent checks capabilities with perf_info first</criterion>
+      <criterion>Agent gracefully handles missing BCC tools</criterion>
+      <criterion>Agent falls back to iostat-based analysis</criterion>
+      <criterion>Agent provides useful results despite limited tools</criterion>
+    </success_criteria>
+  </scenario>
+
+  <!-- Scenario 18: Full Stack I/O Investigation -->
+  <scenario id="18" category="io" difficulty="expert">
+    <prompt>
+      Application I/O is slow. Perform a complete I/O stack analysis:
+      check cache effectiveness, block I/O latency distribution, and
+      identify any slow file operations.
+    </prompt>
+    <expected_tools>
+      <tool name="perf_io_layers" required="true"/>
+      <tool name="perf_bio_latency" required="true"/>
+      <tool name="perf_vfs_latency" required="true"/>
+    </expected_tools>
+    <success_criteria>
+      <criterion>Agent uses perf_io_layers to check cache effectiveness</criterion>
+      <criterion>Agent uses perf_bio_latency for storage latency</criterion>
+      <criterion>Agent uses perf_vfs_latency for file-level issues</criterion>
+      <criterion>Agent correlates findings across all three layers</criterion>
+      <criterion>Agent identifies the primary bottleneck location</criterion>
+      <criterion>Agent provides comprehensive recommendations</criterion>
+    </success_criteria>
+  </scenario>
+</evaluation_pack>

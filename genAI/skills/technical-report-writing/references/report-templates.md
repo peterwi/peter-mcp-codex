@@ -848,7 +848,7 @@ NVMe evaluation notes - 2024-01
 
 Tested Intel P5800X vs Samsung PM1733 for QTG cache tier.
 Lab setup: 3x Dell R750, dual 100G, RHEL 9.
-Tests: fio 4K rand read/write, 128K seq.
+Tests: 4K random read/write, 128K sequential.
 
 Results rough:
 - Intel: 1.5M IOPS read, 500K write, 7us latency
@@ -1014,7 +1014,7 @@ Suitable for capacity-oriented cache tiers where sub-10us latency is acceptable.
 ### Test Configuration
 
 Tests performed on 3x Dell R750 servers with dual 100G networking, RHEL 9.
-Benchmark tool: fio with libaio engine.
+Benchmark tool: storage microbenchmark tool (asynchronous I/O enabled).
 
 Further technical details can be found in Appendix A.
 
@@ -1060,7 +1060,7 @@ performance enablement.
 ### Software Configuration
 
 - RHEL 9.1, kernel 5.14.0
-- fio 3.33, libaio engine
+- Benchmark tool version: 3.33
 - Test parameters: iodepth=64, numjobs=8, runtime=300s
 ```
 

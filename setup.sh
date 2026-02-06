@@ -43,7 +43,7 @@ install_all_tools() {
     log "========================================"
 
     # Skip: hidden dirs, config dirs, templates (tool-sample), and shared libraries (mcp-base)
-    local skip_dirs=(".git" "genAI" "mcp-base" "tool-sample" "images" "fio-plot" "fio-server-scale" "elbencho-tig")
+    local skip_dirs=(".git" "genAI" "mcp-base" "tool-sample" "images")
     for dir in "$SCRIPT_DIR"/*; do
         [[ ! -d "$dir" ]] && continue
         local name=$(basename "$dir")

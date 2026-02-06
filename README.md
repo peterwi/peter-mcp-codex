@@ -1,10 +1,10 @@
 # peter-mcp-codex
 
-Unified monorepo for infrastructure tools, MCP servers, benchmarking suites, and reference skills.
+Unified monorepo for infrastructure tools, MCP servers, and reference skills.
 
 ## Quick Overview
 
-A collection of modular tools following Unix philosophy: each does one thing well and composes with others. Includes CLI tools, MCP servers for LLM integration, and performance benchmarking frameworks.
+A collection of modular tools following Unix philosophy: each does one thing well and composes with others. Includes CLI tools, MCP servers for LLM integration, and reference skills.
 
 ## Structure
 
@@ -13,9 +13,6 @@ perf-mcp/                 # Linux performance troubleshooting MCP server (TypeSc
 cisco-mcp/                # Cisco NX-OS switch management (Python)
 tool-sample/              # Template for creating new Python tools
 mcp-base/                 # Shared Python MCP server base
-fio-plot/                 # Fio benchmark plotting and analysis suite
-fio-server-scale/         # Multi-client fio scale testing framework
-elbencho-tig/             # Elbencho + Telegraf/InfluxDB/Grafana benchmarking
 genAI/skills/             # Reference skill documentation
 setup.sh / reset.sh       # Tool installation and cleanup
 mcp_config.toml           # MCP services configuration
@@ -23,8 +20,19 @@ mcp_config.toml           # MCP services configuration
 
 ## Prerequisites
 
-- Python 3.10+ with [uv](https://docs.astral.sh/uv/)
-- Node.js 20+ (for perf-mcp)
+### Core
+
+- bash + common Unix tools (`awk`, `sed`, `grep`)
+- Python 3.10+ with [uv](https://docs.astral.sh/uv/) (provides `uvx`)
+- Node.js 20+ (provides `node`, `npm`, `npx`)
+
+### Service-specific notes
+
+- `perf` (perf-mcp): requires a Linux host (kernel 4.18+ recommended) and extra tooling for profiling/eBPF
+  (e.g. `perf`, `sysstat`, `bcc-tools`, `bpftrace`). Also requires `perf-mcp` to be built (`cd perf-mcp && npm install && npm run build`).
+- `cisco` (cisco-mcp): requires Python 3.11+, SSH client, a key at `~/.ssh/cisco-key`, and network access to your switch mgmt subnet.
+- `playwright`: requires Playwright browser installs (commonly `npx playwright install` plus OS deps on Linux).
+- `kubernetes`: requires access to a cluster via `KUBECONFIG` / kube-context (and whatever auth your cluster uses).
 
 ## Setup
 
@@ -34,6 +42,9 @@ mcp_config.toml           # MCP services configuration
 
 # Install tools only
 ./setup.sh --tools-only
+
+# List available MCP services
+./setup.sh --list-services
 
 # Show help
 ./setup.sh --help
@@ -45,12 +56,6 @@ mcp_config.toml           # MCP services configuration
 
 - **perf-mcp** - Linux performance troubleshooting using USE method (Utilisation, Saturation, Errors). 21 tools covering CPU profiling, I/O latency, network health, eBPF tracing, and incident triage.
 - **cisco-mcp** - Cisco NX-OS switch management via SSH (VXLAN/EVPN fabric).
-
-### Benchmarking
-
-- **fio-plot** - Fio benchmark execution, result parsing, and plotting. Includes comparison scripts for bandwidth, IOPS, and latency analysis.
-- **fio-server-scale** - Multi-client fio scale testing with monitoring integration and graph generation.
-- **elbencho-tig** - Elbencho distributed storage benchmarks with Telegraf+InfluxDB+Grafana monitoring stack.
 
 ### Templates & Libraries
 
@@ -65,6 +70,8 @@ mcp_config.toml           # MCP services configuration
 - `technical-system-research/` - Technical system investigation
 - `technical-report-writing/` - Structured technical reports
 - `uv-docker-packaging/` - UV-based Docker containerisation
+- `skill-creator/` - Skill authoring guide
+- `skill-evolver/` - Skill evolution through genetic algorithms
 - `superpowers/` - Full development workflow
 
 ## Creating New Tools
@@ -94,7 +101,29 @@ npm run test
 
 All MCP services are defined in `mcp_config.toml`. Use `./setup.sh --list-services` to see what's available, or `./setup.sh --configure` to interactively enable/disable services.
 
-Available services: sequential-thinking, memory, playwright, pyscn, kubernetes, cisco, perf.
+### Configured MCP services
+
+- `sequential_thinking` - Sequential thinking MCP server
+- `memory` - Memory MCP server
+- `playwright` - Playwright MCP server
+- `pyscn` - Python Code Quality Analyser
+- `kubernetes` - Kubernetes cluster management MCP server
+- `cisco` - Cisco NX-OS switch management MCP server
+- `perf` - Linux performance troubleshooting MCP server (USE method)
+
+### Skills available (genAI/skills/)
+
+Each skill is a set of local instructions stored in `genAI/skills/*/SKILL.md`:
+
+- `coupling-evaluation`
+- `mcp-builder`
+- `skill-creator`
+- `skill-evolver`
+- `superpowers`
+- `technical-report-writing`
+- `technical-system-research`
+- `tool-development`
+- `uv-docker-packaging`
 
 ## Development
 

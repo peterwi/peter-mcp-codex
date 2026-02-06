@@ -4,7 +4,7 @@ Instructions for OpenAI Codex when working with this repository.
 
 ## Repository Overview
 
-Unified monorepo for infrastructure tools, MCP servers, benchmarking suites, and reference skills. Tools follow Unix philosophy: do one thing well, compose with others.
+Unified monorepo for infrastructure tools, MCP servers, and reference skills. Tools follow Unix philosophy: do one thing well, compose with others.
 
 ## Project Structure
 
@@ -14,9 +14,6 @@ peter-mcp-codex/
 ├── cisco-mcp/                 # Cisco NX-OS switch management (Python)
 ├── tool-sample/               # Template for creating new Python tools
 ├── mcp-base/                  # Shared Python MCP server base
-├── fio-plot/                  # Fio benchmark plotting and analysis suite
-├── fio-server-scale/          # Multi-client fio scale testing framework
-├── elbencho-tig/              # Elbencho + Telegraf/InfluxDB/Grafana benchmarking
 ├── genAI/                     # Reference skills documentation
 │   └── skills/                # Reusable task skill definitions
 ├── images/                    # Project images
@@ -98,12 +95,6 @@ perf-mcp/
 ├── dist/                  # Compiled output
 └── package.json           # Node.js >=20, @modelcontextprotocol/sdk + zod
 ```
-
-### Benchmarking Suites
-
-- **fio-plot/**: Fio benchmark execution, result parsing, and plotting. Contains `fio-run/` (test execution), `fio-plot/` (graphing library), `fio-report/` (report generation), comparison scripts for bandwidth/IOPS/latency.
-- **fio-server-scale/**: Multi-client fio scale testing with `run-scale-tests.sh`, graph generation via `generate-graphs.sh`, monitoring integration.
-- **elbencho-tig/**: Elbencho distributed benchmarks with Telegraf+InfluxDB+Grafana monitoring stack. Includes `run-tests.sh`, config templates, and graph generation.
 
 ### Shared Library (mcp-base)
 

@@ -22,9 +22,9 @@ npm install -g perf-mcp
 npx perf-mcp
 ```
 
-### Claude Desktop Integration
+### MCP Client Integration
 
-Add to your Claude Desktop configuration (`~/.config/claude/claude_desktop_config.json`):
+Add to your MCP client configuration:
 
 ```json
 {

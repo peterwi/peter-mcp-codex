@@ -291,7 +291,6 @@ Add to `mcp_config.toml`:
 description = "My tool MCP server"
 command = "uvx --from git+https://your-repo#subdirectory=my-tool my-tool-mcp-server"
 env_vars = []
-clients = ["claude", "qwen"]
 enabled = true
 ```
 
@@ -475,4 +474,4 @@ The `setup.sh` script automatically installs all tools:
 - [Click documentation](https://click.palletsprojects.com/)
 - [MCP specification](https://modelcontextprotocol.io/)
 - [uv documentation](https://docs.astral.sh/uv/)
-- Main repo CLAUDE.md for development guidelines
+- Main repo AGENTS.md for development guidelines

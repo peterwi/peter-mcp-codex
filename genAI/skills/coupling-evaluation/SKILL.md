@@ -9,7 +9,7 @@ description: >
 
 # Balanced Coupling Analysis
 
-This skill guides Claude to analyze system coupling **intentionally and systematically** using the Balanced Coupling model.  
+This skill guides the agent to analyze system coupling **intentionally and systematically** using the Balanced Coupling model.  
 Always explicitly reason about three dimensions:
 
 1. **Integration Strength** — how much knowledge components share  
@@ -33,7 +33,7 @@ Focus on design trade-offs, not just abstract statements like “loose coupling 
 
 ---
 
-## Instructions For Claude
+## Instructions
 
 ### Step 1 — Identify Components
 

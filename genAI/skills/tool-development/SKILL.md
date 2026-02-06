@@ -90,7 +90,6 @@ Add your MCP server to `genAI/mcp_config.toml`:
 description = "Tool description MCP server"
 command = "uvx --from git+https://git.c3.zone/jimbro785/tools-and-skills#subdirectory=tool-name tool-name-mcp-server"
 env_vars = ["TOOL_NAME_API_KEY"]  # List required env vars, or [] if none
-clients = ["claude", "qwen"]
 enabled = false  # Set to true when ready
 ```
 

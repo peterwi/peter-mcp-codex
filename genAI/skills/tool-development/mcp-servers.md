@@ -313,7 +313,6 @@ Add your MCP server to `mcp_config.toml` for centralized management:
 description = "Tool description MCP server"
 command = "uvx --from git+https://your-repo#subdirectory=tool-name tool-name-mcp-server"
 env_vars = ["TOOL_NAME_API_KEY"]  # Required environment variables
-clients = ["claude", "qwen"]
 enabled = false  # Set to true when ready for production
 ```
 
@@ -328,13 +327,12 @@ enabled = false  # Set to true when ready for production
 description = "My tool MCP server"
 command = "uvx --from git+https://github.com/user/repo#subdirectory=my-tool my-tool-mcp-server"
 env_vars = []
-clients = ["claude", "qwen"]
 enabled = true
 ```
 
-## Claude Desktop Integration (Alternative)
+## MCP Client Integration
 
-For standalone Claude Desktop configuration, add to `claude_desktop_config.json`:
+Add the server to your MCP client configuration:
 
 ```json
 {
@@ -440,7 +438,7 @@ Provide context for LLM understanding:
 - [ ] Tests cover MCP tool execution (including cache auto-build)
 - [ ] Added to `genAI/mcp_config.toml` with full git uvx path
 - [ ] Documented in README
-- [ ] Claude Desktop config example provided (if needed)
+- [ ] MCP client config example provided (if needed)
 
 ______________________________________________________________________
 

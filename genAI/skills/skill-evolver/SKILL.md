@@ -5,7 +5,7 @@ description: Evolve skills through genetic algorithms. Use when creating new ski
 
 # Skill Evolver
 
-Autonomously creates and optimizes Claude Code skills using genetic algorithms.
+Autonomously creates and optimizes skills using genetic algorithms.
 
 ## Quick Start
 
@@ -110,7 +110,7 @@ evolution_workspace/
 
 - Python 3.8+
 - PyYAML: `pip install pyyaml`
-- Claude CLI or similar LLM tool
+- An LLM CLI tool (e.g. codex, claude, or similar)
 
 ## Advanced
 

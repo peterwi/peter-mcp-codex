@@ -1,82 +1,52 @@
 # MCP Services Configuration
-# TOML format for better readability and maintainability
+# Reference configuration for available MCP servers in this repository.
+# These services can be used with any MCP-compatible client.
 
 [settings]
-required_commands = ["claude", "qwen", "uvx", "npx"]
+required_commands = ["uvx", "npx"]
 show_services_after_setup = true
-
-[services.serena]
-description = "Serena IDE assistant MCP server"
-command = "uvx --from git+https://github.com/oraios/serena serena start-mcp-server --context ide-assistant --project {CURRENT_DIR}"
-env_vars = []
-clients = ["claude", "qwen"]
-enabled = true
 
 [services.sequential_thinking]
 description = "Sequential thinking MCP server"
 command = "npx -y @modelcontextprotocol/server-sequential-thinking"
 env_vars = []
-clients = ["claude", "qwen"]
 enabled = true
 
 [services.memory]
 description = "Memory MCP server"
 command = "npx -y @modelcontextprotocol/server-memory"
 env_vars = []
-clients = ["claude", "qwen"]
 enabled = true
 
 [services.playwright]
 description = "Playwright MCP server"
 command = "npx -y @playwright/mcp@latest"
 env_vars = []
-clients = ["claude", "qwen"]
 enabled = true
 
 [services.pyscn]
-description = "Python Code Quality Analyzer"
+description = "Python Code Quality Analyser"
 command = "uvx pyscn-mcp"
 env_vars = []
-clients = ["claude", "qwen"]
 enabled = true
 
 [services.kubernetes]
 description = "Kubernetes cluster management MCP server"
 command = "npx -y kubernetes-mcp-server@latest"
 env_vars = []
-clients = ["claude", "qwen"]
 enabled = true
 
 
 ## Custom MCP servers
 
-[services.vast_admin]
-description = "VAST Admin MCP Server for VAST Data storage administration"
-command = "/persist/venvs/python-vast/bin/vast-admin-mcp mcp"
-env_vars = []
-clients = ["claude", "qwen"]
-enabled = true
-
 [services.cisco]
 description = "Cisco NX-OS switch management MCP server"
 command = "uvx --from {SCRIPT_DIR}/cisco-mcp cisco-mcp"
 env_vars = []
-clients = ["claude", "qwen"]
 enabled = true
 
 [services.perf]
 description = "Linux performance troubleshooting MCP server (USE method)"
 command = "node {SCRIPT_DIR}/perf-mcp/dist/index.js"
 env_vars = []
-clients = ["claude", "qwen"]
 enabled = true
-
-## Sample tool (template - disabled by default)
-## See tool-sample/README.md for how to create your own tools
-
-# [services.my_tool]
-# description = "Sample tool MCP server - copy and customize"
-# command = "uvx --from git+https://your-repo#subdirectory=tool-sample my-tool-mcp-server"
-# env_vars = []
-# clients = ["claude", "qwen"]
-# enabled = false

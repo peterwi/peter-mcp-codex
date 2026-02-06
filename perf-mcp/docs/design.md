@@ -1083,7 +1083,7 @@ enum ErrorCode {
 
 ### 11.1 Primary: stdio
 
-Default transport for Claude Code integration:
+Default transport for MCP client integration:
 
 ```bash
 # Run server

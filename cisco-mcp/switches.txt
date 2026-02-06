@@ -1,0 +1,24 @@
+# TIG Network Switch Inventory
+# Format: IP_ADDRESS    HOSTNAME    ROLE    RACK
+
+# --- Spine Switches ---
+10.253.16.10    SS1-TIG-6A21    spine    6A21
+10.253.16.11    SS2-TIG-6A21    spine    6A21
+
+# --- Leaf Switches (ToR) ---
+10.253.16.14    LS1a-TIG-6A7    leaf    6A7
+10.253.16.15    LS1b-TIG-6A7    leaf    6A7
+10.253.16.16    LS1a-TIG-6A6    leaf    6A6
+10.253.16.17    LS1b-TIG-6A6    leaf    6A6
+10.253.16.18    LS1a-TIG-6A5    leaf    6A5
+10.253.16.19    LS1b-TIG-6A5    leaf    6A5
+10.253.16.20    LS1a-TIG-6A4    leaf    6A4
+10.253.16.21    LS1b-TIG-6A4    leaf    6A4
+
+# --- Border Leaf Switches ---
+10.253.16.12    BL1a-TIG-6A8    border    6A8
+10.253.16.13    BL1b-TIG-6A8    border    6A8
+
+# --- Additional Leaf Switches (6A8) ---
+10.253.16.28    LS3a-TIG-6A8    leaf    6A8
+10.253.16.29    LS4a-TIG-6A8    leaf    6A8
